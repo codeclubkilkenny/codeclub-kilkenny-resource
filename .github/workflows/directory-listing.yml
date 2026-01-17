@@ -1,0 +1,24 @@
+name: Build directory listings
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate index.html listings
+        uses: gacts/directory-listing@v1
+        with:
+          path: .
+
+      - name: Commit generated index.html files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-generate directory listings"
