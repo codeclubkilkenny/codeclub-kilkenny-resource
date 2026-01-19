@@ -4,10 +4,11 @@ set -euo pipefail
 # ------------------------------------------------------------
 # Firefox Code Club setup – ALL Ubuntu variants
 # - Works with Snap Firefox AND deb Firefox
-# - Adds bookmarks
+# - Sets Code Club website as homepage (locked)
+# - Sets Google as default search engine (locked)
+# - Adds Code Club bookmarks
 # - Removes news / Pocket / sponsored content
-# - Sets Google as default search engine
-# - Idempotent (safe to re-run)
+# - Safe to re-run
 # ------------------------------------------------------------
 
 if [[ "${EUID}" -ne 0 ]]; then
@@ -25,7 +26,7 @@ if [[ -d /var/snap/firefox/common ]]; then
   echo "[INFO] Snap Firefox detected"
 fi
 
-# deb/apt Firefox
+# deb/apt Firefox (always include)
 POLICY_PATHS+=("/etc/firefox/policies")
 
 POLICIES_JSON='{
@@ -41,7 +42,7 @@ POLICIES_JSON='{
 
     "Preferences": {
       "browser.startup.homepage": {
-        "Value": "https://codeclubkilkenny.github.io/codeclub-kilkenny-resources/",
+        "Value": "https://sites.google.com/coderdojo.com/codeclubkilkenny/home",
         "Status": "locked"
       },
       "browser.search.defaultenginename": {
@@ -61,7 +62,12 @@ POLICIES_JSON='{
 
     "Bookmarks": [
       {
-        "Title": "Code Club Kilkenny",
+        "Title": "Code Club Kilkenny (Home)",
+        "URL": "https://sites.google.com/coderdojo.com/codeclubkilkenny/home",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Code Club Resources",
         "URL": "https://codeclubkilkenny.github.io/codeclub-kilkenny-resources/",
         "Placement": "toolbar"
       },
@@ -106,8 +112,8 @@ done
 
 echo
 echo "[IMPORTANT]"
-echo "• Close ALL Firefox windows"
+echo "• Fully close ALL Firefox windows"
 echo "• Reopen Firefox"
-echo "• Check: about:policies → Active"
+echo "• Verify at: about:policies → Active"
 echo
 echo "[DONE]"
