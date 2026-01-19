@@ -15,6 +15,38 @@ fi
 
 log(){ echo "[setup] $*"; }
 
+# --- PRE-FLIGHT: fix Microsoft VS Code repo Signed-By conflicts BEFORE any apt update ---
+fix_microsoft_repo_conflicts() {
+  # If both exist, APT can fail due to different Signed-By paths.
+  # We enforce one canonical repo file (vscode.list) using /etc/apt/keyrings/microsoft.gpg
+  local sources_file="/etc/apt/sources.list.d/vscode.sources"
+  local list_file="/etc/apt/sources.list.d/vscode.list"
+
+  # If a deb822 sources file exists, it often uses /usr/share/keyrings/microsoft.gpg
+  # Disable it to avoid conflicting Signed-By definitions.
+  if [[ -f "${sources_file}" ]]; then
+    log "Pre-flight: disabling ${sources_file} to prevent Signed-By conflicts"
+    mv -f "${sources_file}" "${sources_file}.disabled"
+  fi
+
+  # Also disable any other deb822 files that reference packages.microsoft.com/repos/code
+  # (belt + braces for machines that have been tinkered with)
+  for f in /etc/apt/sources.list.d/*.sources; do
+    [[ -e "$f" ]] || continue
+    if grep -q "packages.microsoft.com/repos/code" "$f" 2>/dev/null; then
+      log "Pre-flight: disabling conflicting source file $f"
+      mv -f "$f" "$f.disabled"
+    fi
+  done
+
+  # If the list file exists but uses /usr/share/keyrings/microsoft.gpg, rewrite it to /etc/apt/keyrings/microsoft.gpg
+  if [[ -f "${list_file}" ]]; then
+    sed -i 's#signed-by=/usr/share/keyrings/microsoft.gpg#signed-by=/etc/apt/keyrings/microsoft.gpg#g' "${list_file}" || true
+  fi
+}
+fix_microsoft_repo_conflicts
+
+
 # ------------- CONFIG (edit if your paths differ) -------------
 REPO_OWNER="codeclubkilkenny"
 REPO_NAME="codeclub-kilkenny-resources"
