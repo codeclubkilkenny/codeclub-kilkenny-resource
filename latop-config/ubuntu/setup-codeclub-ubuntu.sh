@@ -21,9 +21,9 @@ REPO_NAME="codeclub-kilkenny-resources"
 REPO_BRANCH="main"
 
 # Paths INSIDE the repo (must match your repo)
-VSCODE_SCRIPT_PATH="laptop-config/ubuntu/install-vscode-ubuntu.sh"
-FIREFOX_SCRIPT_PATH="laptop-config/ubuntu/firefox-codeclub-setup.sh"
-ARDUINO_SCRIPT_PATH="laptop-config/ubuntu/install-arduino-ide-appimage.sh"
+VSCODE_SCRIPT_PATH="https://raw.githubusercontent.com/codeclubkilkenny/codeclub-kilkenny-resources/refs/heads/main/latop-config/ubuntu/install-vscode-ubuntu.sh"
+FIREFOX_SCRIPT_PATH="https://raw.githubusercontent.com/codeclubkilkenny/codeclub-kilkenny-resources/refs/heads/main/latop-config/ubuntu/firefox-codeclub-setup.sh"
+ARDUINO_SCRIPT_PATH="https://raw.githubusercontent.com/codeclubkilkenny/codeclub-kilkenny-resources/refs/heads/main/latop-config/ubuntu/install-arduino-ide-appimage.sh"
 
 RAW_BASE="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${REPO_BRANCH}"
 
