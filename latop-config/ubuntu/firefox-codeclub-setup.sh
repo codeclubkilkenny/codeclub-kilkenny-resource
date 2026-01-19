@@ -3,12 +3,6 @@ set -euo pipefail
 
 # ------------------------------------------------------------
 # Firefox Code Club setup – ALL Ubuntu variants
-# - Works with Snap Firefox AND deb Firefox
-# - Sets Code Club website as homepage (locked)
-# - Sets Google as default search engine (locked)
-# - Adds Code Club bookmarks
-# - Removes news / Pocket / sponsored content
-# - Safe to re-run
 # ------------------------------------------------------------
 
 if [[ "${EUID}" -ne 0 ]]; then
@@ -16,17 +10,16 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-echo "[INFO] Detecting Firefox install type…"
+echo "[INFO] Setting up Firefox Code Club policies…"
 
 POLICY_PATHS=()
 
 # Snap Firefox
 if [[ -d /var/snap/firefox/common ]]; then
   POLICY_PATHS+=("/var/snap/firefox/common/policies")
-  echo "[INFO] Snap Firefox detected"
 fi
 
-# deb/apt Firefox (always include)
+# deb/apt Firefox
 POLICY_PATHS+=("/etc/firefox/policies")
 
 POLICIES_JSON='{
@@ -45,13 +38,21 @@ POLICIES_JSON='{
         "Value": "https://sites.google.com/coderdojo.com/codeclubkilkenny/home",
         "Status": "locked"
       },
+
       "browser.search.defaultenginename": {
         "Value": "Google",
         "Status": "locked"
       },
+
+      "browser.toolbars.bookmarks.visibility": {
+        "Value": "always",
+        "Status": "locked"
+      },
+
       "browser.newtabpage.enabled": {
         "Value": true
       },
+
       "browser.newtabpage.activity-stream.feeds.section.topstories": { "Value": false },
       "browser.newtabpage.activity-stream.feeds.snippets": { "Value": false },
       "browser.newtabpage.activity-stream.feeds.topsites": { "Value": false },
@@ -72,48 +73,14 @@ POLICIES_JSON='{
         "Placement": "toolbar"
       },
       {
-        "Title": "Arduino Web Editor",
+        "Title": "Arduino",
         "URL": "https://create.arduino.cc/editor",
         "Placement": "toolbar"
       },
       {
-        "Title": "Microsoft MakeCode",
+        "Title": "MakeCode",
         "URL": "https://makecode.microbit.org/",
         "Placement": "toolbar"
       },
       {
         "Title": "Scratch",
-        "URL": "https://scratch.mit.edu/",
-        "Placement": "toolbar"
-      },
-      {
-        "Title": "Python",
-        "URL": "https://www.python.org/",
-        "Placement": "toolbar"
-      },
-      {
-        "Title": "Google Drive",
-        "URL": "https://drive.google.com/",
-        "Placement": "toolbar"
-      }
-    ]
-  }
-}'
-
-echo "[INFO] Writing Firefox enterprise policies…"
-
-for DIR in "${POLICY_PATHS[@]}"; do
-  mkdir -p "${DIR}"
-  echo "${POLICIES_JSON}" > "${DIR}/policies.json"
-  chmod 644 "${DIR}/policies.json"
-  chown root:root "${DIR}/policies.json"
-  echo "[OK] Policies written to ${DIR}/policies.json"
-done
-
-echo
-echo "[IMPORTANT]"
-echo "• Fully close ALL Firefox windows"
-echo "• Reopen Firefox"
-echo "• Verify at: about:policies → Active"
-echo
-echo "[DONE]"
