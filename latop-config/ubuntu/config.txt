@@ -1,3 +1,9 @@
+# Ubuntu updater 19.01.2026 Aidan Grogan
+# Update OS
+# Install VS Code
+# Change background
+#
+###########################################################################
 # 1. Update system
 sudo apt update && sudo apt upgrade -y
 
