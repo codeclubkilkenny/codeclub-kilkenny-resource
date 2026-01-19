@@ -1,1 +1,3 @@
-
+wget -O install-vscode-ubuntu.sh https://raw.githubusercontent.com/codeclubkilkenny/codeclub-kilkenny-resources/refs/heads/main/latop-config/ubuntu/install-vscode-ubuntu.sh
+chmod +x install-vscode-ubuntu.sh
+sudo ./install-vscode-ubuntu.sh
