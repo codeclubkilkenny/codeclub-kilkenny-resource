@@ -13,11 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate index.html listings
+      # 🔥 Remove ALL old index.html files first
+      - name: Remove old directory listings
+        run: |
+          find . -name "index.html" -type f -delete
+
+      # ✅ Generate fresh listings for EVERYTHING
+      - name: Generate directory listings
         uses: gacts/directory-listing@v1
         with:
           path: .
 
+      # ✅ Commit regenerated listings
       - name: Commit generated index.html files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
