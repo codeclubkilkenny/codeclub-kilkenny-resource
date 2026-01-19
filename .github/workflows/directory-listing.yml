@@ -18,7 +18,12 @@ jobs:
         run: |
           find . -name "index.html" -type f -delete
 
-      # ✅ Generate fresh listings for EVERYTHING
+           # 🔠 Ensure deterministic alphabetical order
+      - name: Sort directories and files
+        run: |
+          find . -mindepth 1 -maxdepth 1 -print | sort
+
+      # 📁 Generate directory listings (now alphabetical)
       - name: Generate directory listings
         uses: gacts/directory-listing@v1
         with:
