@@ -84,3 +84,29 @@ POLICIES_JSON='{
       },
       {
         "Title": "Scratch",
+        "URL": "https://scratch.mit.edu/",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Python",
+        "URL": "https://www.python.org/",
+        "Placement": "toolbar"
+      }
+    ]
+  }
+}'
+
+for DIR in "${POLICY_PATHS[@]}"; do
+  mkdir -p "${DIR}"
+  echo "${POLICIES_JSON}" > "${DIR}/policies.json"
+  chmod 644 "${DIR}/policies.json"
+  chown root:root "${DIR}/policies.json"
+  echo "[OK] Policies written to ${DIR}/policies.json"
+done
+
+echo
+echo "[DONE]"
+echo "• Fully close Firefox"
+echo "• Reopen Firefox"
+echo "• Bookmarks toolbar will be visible and locked"
+echo "• Verify via: about:policies → Active"
