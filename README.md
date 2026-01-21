@@ -1,2 +1,2 @@
 # codeclub-kilkenny-resources
-Code Club Kilkenny Resources
+Code Club Kilkenny Resources Page
