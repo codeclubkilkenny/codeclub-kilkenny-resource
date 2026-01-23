@@ -1,8 +1,8 @@
-#include "Modulino.h"                 // Gives us easy control of all Modulino sensors
-#include "ArduinoGraphics.h"          // Lets us draw text and shapes
-#include "Arduino_LED_Matrix.h"       // Controls the little LED screen on the Arduino
+#include "Modulino.h"                 // Gives us easy control of Modulino sensors
+#include "ArduinoGraphics.h"          // Lets us draw text like words and numbers
+#include "Arduino_LED_Matrix.h"       // Controls the tiny LED screen on the Arduino
 
-ModulinoThermo thermo;                // Create the temperature sensor
+ModulinoThermo thermo;                // Create the temperature + humidity sensor
 ArduinoLEDMatrix matrix;              // Create the LED matrix screen
 
 void showScroll(const char* msg) {    // This function shows scrolling text on the screen
@@ -18,14 +18,19 @@ void showScroll(const char* msg) {    // This function shows scrolling text on t
 void setup() {
   matrix.begin();                     // Turn on the LED matrix
   Modulino.begin();                   // Turn on the Modulino system
-  thermo.begin();                     // Turn on the temperature sensor
+  thermo.begin();                     // Turn on the Thermo sensor
 }
 void loop() {
   float t = thermo.getTemperature();  // Read the temperature in degrees Celsius
+  float h = thermo.getHumidity();     // Read the humidity as a percentage
 
-  char msg[16];                       // Make a space to store the message
-  snprintf(msg, sizeof(msg), "%.1fC ", t); // Turn the number into text like 21.4C
+  char msg[20];                       // Make space to store text
 
-  showScroll(msg);                    // Show the temperature on the screen
-  delay(250);                         // Wait a short time before updating again
+  snprintf(msg, sizeof(msg), "TEMP %.1fC ", t); // Turn temperature into text
+  showScroll(msg);                    // Show temperature on the screen
+  delay(1500);                        // Wait so kids can read it
+
+  snprintf(msg, sizeof(msg), "HUM %.0f%% ", h); // Turn humidity into text
+  showScroll(msg);                    // Show humidity on the screen
+  delay(1500);                        // Wait again before looping
 }
